@@ -5,8 +5,9 @@ const commentSchema = new Schema({
   event: { type: Schema.Types.ObjectId, ref: 'Event', required: true },
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   message: { type: String, required: true },
-  rating: { type: Number, min: 1, max: 5 },
   createdAt: { type: Date, default: Date.now }
+}, {
+  timestamps: true
 });
 
 const Comment = mongoose.model('Comment', commentSchema, 'comments');

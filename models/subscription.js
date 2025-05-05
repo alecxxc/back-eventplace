@@ -5,6 +5,8 @@ const subscriptionSchema = new Schema ({
   user: { type: Schema.Types.ObjectId, ref:  'User', required: true, index: true },
   event: { type: Schema.Types.ObjectId, ref: 'Event', required: true, index: true},
   subscriptionDate: { type: Date, default: Date.now}
+}, {
+  timestamps: true
 });
 
 // Prevenir inscripciones duplicadas

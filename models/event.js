@@ -21,9 +21,8 @@ const eventSchema = new Schema({
     default: 'Por realizar',
     required: true
   },
-  capacity: { type: String, required: true },
-  availablePlace: { type: String },
-  reservedPlace: { type: String }
+  capacity: { type: Number, required: true },
+  reservedPlace: { type: Number, default: 0 }
 }, {
   //Crea dos campos: createAt: Almacena la fecha y la hora en la que el documento se creó, 
   //                 updateAt: Almacena la fecha y hora en el que el documento fue actualizado

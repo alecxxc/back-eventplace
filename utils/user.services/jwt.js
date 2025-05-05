@@ -4,7 +4,7 @@ const SECRET_KEY = 'llave_secreta';
 
 function generateToken(user) {
   return jwt.sign(
-    { id: user._id, rol: user.rol }, 
+    { id: user._id }, 
     SECRET_KEY,
     { expiresIn: '1h'}
   );

@@ -1,5 +1,14 @@
 const directorService = require('../../services/director/director.service');
 
+exports.getData = async (req, res) => {
+  try {
+    const result = await directorService.getData(req.user);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+}
+
 exports.createEvent = async (req, res) => {
   try {
     const result = await directorService.createEvent(req.body, req.user);

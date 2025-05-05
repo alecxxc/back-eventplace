@@ -11,26 +11,24 @@ const adminRoutes = require('./routes/users/admin.routes');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+const corsOptions = {
+  origin: '*',
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 connectDB();
 
-app.use('/user', userRoutes);
-app.use('/student', studentRoutes);
-app.use('/director', directorRoutes);
-app.use('/admin', adminRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/student', studentRoutes);
+app.use('/api/director', directorRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.send('Servidor funcionando'); 
 });
 
-
-
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
-
-/* 
-contraseña: 1dxtVyh4kKaSq5xo 
-nombre de usuario: garciaalexandro449
-*/

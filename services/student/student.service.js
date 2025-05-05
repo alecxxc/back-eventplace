@@ -26,11 +26,19 @@ async function subscription (idUser, { _id }) {
 
   const subscription = new Subscription ({ user: idUser, event: _id });
   await subscription.save();
-  return 'Te has suscrito a un evento';
+  return 'Te has suscrito a un evento. Puedes ver tus suscripciones en el apartado del perfil';
 };
 
 async function showSubscriptions ({ id }) {
-  const subscriptions = await Subscription.find({ user: id }, { user: false, subscriptionDate: false, __v: false }).populate('event', 'name category image place date time director status capacity');
+  const subscriptions = await Subscription.find({ user: id }, { user: false, subscriptionDate: false, __v: false })
+    .populate({
+      path: 'event', 
+      select: 'name category image place date time director status capacity',
+      populate: {
+        path: 'director',
+        select: 'name -_id'
+      }
+    });
 
   if (subscriptions.length === 0) throw new Error ('No te has suscrito a ningún evento');
 
@@ -71,8 +79,10 @@ async function showComments ({ id }) {
 };
 
 async function editComment ({ _id, message }) {
-  const comment = await Comment.findByIdAndUpdate(_id, { message }, { new: true });
-  return comment;
+  if (!_id || !message) throw new Error ('No se puede editar el comentario');
+
+  await Comment.findByIdAndUpdate(_id, { message }, { new: true });
+  return 'Comentario editado';
 };
 
 async function deleteComment ({ _id }) {

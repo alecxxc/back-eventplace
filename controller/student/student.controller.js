@@ -31,7 +31,6 @@ exports.subscription = async (req, res) => {
 exports.showSubscriptions = async (req, res) => {
   try {
     const result = await studentService.showSubscriptions(req.user);
-    console.log(req.user);
     res.json({ success: true, data: result});
   }  catch (error) {
     res.status(400).json({ success: false, message: error.message });

@@ -16,7 +16,7 @@ async function registerUser({ name, email, password, program }) {
   const newUser = new User({ name, password: hashedPassword, email, program, rol: 'Estudiante' });
   await newUser.save();
 
-  const redirectRoute = '/user/login'; 
+  const redirectRoute = '/api/user/login'; 
 
   return { message: 'Usuario registrado', redirect: redirectRoute };
 };
@@ -34,13 +34,13 @@ async function loginUser({ email, password }) {
   let redirectRoute = '';
   switch (user.rol) {
     case 'Estudiante':
-      redirectRoute = '/student/profile';
+      redirectRoute = '/api/student/profile';
       break;
     case 'Director':
-      redirectRoute = '/director/profile';
+      redirectRoute = '/api/director/profile';
       break;
     case 'Administrador':
-      redirectRoute = '/admin/profile';
+      redirectRoute = '/api/admin/profile';
       break;
     default:
       throw new Error ('Rol no válido');
@@ -57,3 +57,5 @@ module.exports = {
   registerUser,
   loginUser
 }
+
+

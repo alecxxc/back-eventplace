@@ -10,12 +10,11 @@ function checkToken (req, res, next) {
   try {
     const cleanToken = token.replace("Bearer ", "");
     const verified = jwt.verify(cleanToken, SECRET_KEY);
-    const decoded = jwt.decode(cleanToken);
     req.user = verified;
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Token inválido' });
-  }
-}
+  } 
+};
 
 module.exports = checkToken;

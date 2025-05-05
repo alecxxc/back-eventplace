@@ -2,20 +2,20 @@ const express = require('express');
 const router = express.Router();
 
 const checkToken = require('../../middlewares/auth.middleware');
-/* const checkRol = require('../../middlewares/checkRol.middleware'); */
+const checkRol = require('../../middlewares/checkRol.middleware');
 
 const directorController = require('../../controller/director/director.controller');
-const param = 'Director';
+const PARAM = 'Director';
 
-router.get('/profile', checkToken, directorController.getData);
+router.get('/profile', checkToken, checkRol(PARAM), directorController.getData);
 
-router.post('/createevent', checkToken, directorController.createEvent);
+router.post('/createevent', checkToken, checkRol(PARAM), directorController.createEvent);
 
-router.get('/checkevents', checkToken, directorController.checkEvents);
+router.get('/checkevents', checkToken, checkRol(PARAM), directorController.checkEvents);
 
-router.put('/updateevent', checkToken, directorController.updateEvent);
+router.put('/updateevent', checkToken, checkRol(PARAM), directorController.updateEvent);
 
-router.delete('/deleteevent', checkToken, directorController.deleteEvent);
+router.delete('/deleteevent', checkToken, checkRol(PARAM), directorController.deleteEvent);
 
 
 module.exports = router;

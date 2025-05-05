@@ -6,7 +6,6 @@ const changeRol = require('../../controller/admin/changerol.controller');
 
 const checkToken = require('../../middlewares/auth.middleware');
 
-/* const checkRol = require('../../middlewares/checkRol.middleware'); */
 const param = 'Administrador'
 
 

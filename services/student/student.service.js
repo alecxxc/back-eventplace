@@ -33,14 +33,14 @@ async function showSubscriptions ({ id }) {
   const subscriptions = await Subscription.find({ user: id }, { user: false, subscriptionDate: false, __v: false })
     .populate({
       path: 'event', 
-      select: 'name category image place date time director status capacity',
+      select: 'name category image place date time director description status capacity reservedPlace',
       populate: {
         path: 'director',
         select: 'name -_id'
       }
     });
 
-  if (subscriptions.length === 0) throw new Error ('No te has suscrito a ningún evento');
+  if (subscriptions.length === 0) return 'No te has suscrito a ningún evento';
 
   return subscriptions; 
 };
@@ -60,11 +60,12 @@ async function availableEvents () {
   return events;
 };
 
-async function comment ({ _id, message, rating }, { id }) {
-  if (!_id || !message || !rating) throw new Error ('No se puede crear un comentario');
-  if (!message || !rating) throw new Error ('Todos los campos son obligatorios');
+async function comment ({ _id, message }, { id }) {
+  console.log('Ejecutando función comment sin rating');
+  if (!_id || !message) throw new Error ('No se puede crear un comentario');
+  if (!message) throw new Error ('Todos los campos son obligatorios');
 
-  const comment = new Comment ({ event: _id, user: id, message, rating });
+  const comment = new Comment ({ event: _id, user: id, message });
   await comment.save();
 
   return 'Comentario creado';

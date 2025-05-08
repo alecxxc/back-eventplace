@@ -68,7 +68,8 @@ async function recommendedEvent () {
         },
         description: 1,
         place: 1,
-        capacity: 1
+        capacity: 1,
+        image: 1
       }
     },
     {

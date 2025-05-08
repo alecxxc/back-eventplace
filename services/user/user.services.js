@@ -127,7 +127,7 @@ async function calendarEvents ({ year, month}) {
 
   const eventos = await Event.find({
     date: { $gte: startDate, $lte: endDate },
-  }, { name: true, date: true, image: true, description: true, place: true});
+  }, { name: true, date: true, image: true, description: true, place: true, _id: false});
   return eventos;
 };
 

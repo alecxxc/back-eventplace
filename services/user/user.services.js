@@ -55,9 +55,29 @@ async function loginUser({ email, password }) {
 };
 
 async function recommendedEvent () {
-  const recommendedEvent = await Event.find({}, { _id: false }).limit(3).populate('director', 'name -_id');
-  return recommendedEvent; 
+  const recommendedEvent = await Event.aggregate([
+    {
+      $project: {
+        _id: 0,
+        name: 1,
+        date: {
+          $dateToString: {
+            format: "%Y-%m-%d",  // Año-Mes-Día
+            date: "$date"
+          }
+        },
+        description: 1,
+        place: 1,
+        capacity: 1
+      }
+    },
+    {
+      $limit: 3
+    }
+  ])
+  return recommendedEvent;
 };
+
 
 async function eventsForYear () {
  const events = await Event.aggregate([
@@ -78,7 +98,7 @@ async function eventsForYear () {
     },
     {
       $project: {
-        _id: 1,
+        _id: 0,
         name: 1,
         category: 1,
         place: 1,

@@ -54,7 +54,7 @@ async function loginUser({ email, password }) {
   }
 };
 
-async function recommendedEvent () {
+async function startRecommendedEvent () {
   const recommendedEvent = await Event.aggregate([
     {
       $project: {
@@ -80,7 +80,7 @@ async function recommendedEvent () {
 };
 
 
-async function eventsForYear () {
+async function galleryEventsForYear () {
  const events = await Event.aggregate([
     {
       $match: {
@@ -119,9 +119,22 @@ async function eventsForYear () {
 };
 
 
+
+async function calendarEvents ({ year, month}) {
+  if (!year || !month) throw new Error ('El año y el mes son obligatorios');
+  const startDate = new Date(year, month - 1, 1); // Primer día del mes
+  const endDate = new Date(year, month, 0, 23, 59, 59, 999); // Último día del mes
+
+  const eventos = await Event.find({
+    date: { $gte: startDate, $lte: endDate },
+  });
+  return eventos;
+};
+
 module.exports = {
   registerUser,
   loginUser,
-  recommendedEvent,
-  eventsForYear
+  startRecommendedEvent,
+  galleryEventsForYear,
+  calendarEvents
 };

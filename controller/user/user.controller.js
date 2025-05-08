@@ -18,18 +18,27 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.recommendedEvent = async (req, res) => {
+exports.startRecommendedEvent = async (req, res) => {
   try {
-    const result = await userService.recommendedEvent();
+    const result = await userService.startRecommendedEvent();
     res.json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
 };
 
-exports.eventsForYear = async (req, res) => {
+exports.galleryEventsForYear = async (req, res) => {
   try {
-    const result = await userService.eventsForYear();
+    const result = await userService.galleryEventsForYear();
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+exports.calendarEvents = async (req, res) => {
+  try {
+    const result = await userService.calendarEvents(req.body);
     res.json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

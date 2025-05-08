@@ -120,16 +120,49 @@ async function galleryEventsForYear () {
 
 
 
-async function calendarEvents ({ year, month}) {
-  if (!year || !month) throw new Error ('El año y el mes son obligatorios');
-  const startDate = new Date(year, month - 1, 1); // Primer día del mes
-  const endDate = new Date(year, month, 0, 23, 59, 59, 999); // Último día del mes
+async function calendarEvents({ year, month }) {
+  if (!year || !month) throw new Error('El año y el mes son obligatorios');
 
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+
+  // Obtenemos los eventos dentro del rango
   const eventos = await Event.find({
-    date: { $gte: startDate, $lte: endDate },
-  }, { name: true, date: true, image: true, description: true, place: true, _id: false});
-  return eventos;
+    date: {
+      $gte: startDate,
+      $lte: endDate
+    }
+  }, {
+    _id: 0,
+    name: 1,
+    category: 1,
+    place: 1,
+    image: 1,
+    description: 1,
+    date: 1
+  });
+
+  // Formateamos la fecha con Intl.DateTimeFormat en español
+  const eventosFormateados = eventos.map(evento => {
+    const opciones = {
+      timeZone: 'America/Bogota',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    };
+
+    const fechaFormateada = new Intl.DateTimeFormat('es-CO', opciones).format(new Date(evento.date));
+
+    return {
+      ...evento.toObject(),
+      date: fechaFormateada
+    };
+  });
+
+  return eventosFormateados;
 };
+
+
 
 module.exports = {
   registerUser,

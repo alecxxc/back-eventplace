@@ -55,14 +55,12 @@ async function loginUser({ email, password }) {
 };
 
 async function recommendedEvent () {
-  const recommendedEvent = Event.find({}).limit(3).populate('director', 'name -_id');
+  const recommendedEvent = await Event.find({}).limit(3).populate('director', 'name -_id');
   return recommendedEvent; 
-}
+};
 
 module.exports = {
   registerUser,
   loginUser,
   recommendedEvent
 };
-
-

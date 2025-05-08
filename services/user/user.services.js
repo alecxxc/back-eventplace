@@ -78,7 +78,7 @@ async function eventsForYear () {
     },
     {
       $project: {
-        _id: 0,
+        _id: 1,
         name: 1,
         category: 1,
         place: 1,

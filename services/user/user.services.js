@@ -59,8 +59,46 @@ async function recommendedEvent () {
   return recommendedEvent; 
 };
 
+async function eventsForYear () {
+ const events = await Event.aggregate([
+    {
+      $match: {
+        $expr: {
+          $in: [
+            { $year: "$date" },
+            [2023, 2024]
+          ]
+        }
+      }
+    },
+    {
+      $sort: {
+        date: -1
+      }
+    },
+    {
+      $project: {
+        name: 1,
+        category: 1,
+        place: 1,
+        date: {
+          $dateToString: {
+            format: "%Y-%m-%d",  // Año-Mes-Día
+            date: "$date",
+            timezone: "America/Bogota" // opcional, evita UTC
+          }
+        },  
+        description: 1
+      }
+    }
+  ])
+  return events;
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
-  recommendedEvent
+  recommendedEvent,
+  eventsForYear
 };

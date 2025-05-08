@@ -25,4 +25,13 @@ exports.recommendedEvent = async (req, res) => {
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
-}
+};
+
+exports.eventsForYear = async (req, res) => {
+  try {
+    const result = await userService.eventsForYear();
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

@@ -6,5 +6,6 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 
 router.get('/recommendedevent', userController.recommendedEvent);
+router.get('/eventsforyear', userController.eventsForYear);
 
 module.exports = router;

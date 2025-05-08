@@ -55,7 +55,7 @@ async function loginUser({ email, password }) {
 };
 
 async function recommendedEvent () {
-  const recommendedEvent = await Event.find({}).limit(3).populate('director', 'name -_id');
+  const recommendedEvent = await Event.find({}, { _id: false }).limit(3).populate('director', 'name -_id');
   return recommendedEvent; 
 };
 
@@ -78,6 +78,7 @@ async function eventsForYear () {
     },
     {
       $project: {
+        _id: 0,
         name: 1,
         category: 1,
         place: 1,
@@ -88,7 +89,8 @@ async function eventsForYear () {
             timezone: "America/Bogota" // opcional, evita UTC
           }
         },  
-        description: 1
+        description: 1,
+        image: 1
       }
     }
   ])

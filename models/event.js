@@ -11,7 +11,7 @@ const eventSchema = new Schema({
   }, 
   image: { type: String, required: true },
   place: { type: String, required: true }, 
-  date: { type: Date, index: true, required: true },
+  date: { type: String, index: true, required: true },
   time: { type: String, required: true},
   director: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   description: { type: String, required: true},

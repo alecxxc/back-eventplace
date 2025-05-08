@@ -4,29 +4,20 @@ const router = express.Router();
 const checkToken = require('../../middlewares/auth.middleware');
 const checkRol = require('../../middlewares/checkRol.middleware');
 
-const studentController = require('../../controller/student/student.controller')
+const studentController = require('../../controller/student/student.controller');
 
-const PARAM = 'Estudiante';
 
-router.get('/profile', checkToken, checkRol(PARAM), studentController.getData);
+router.get('/profile', checkToken, checkRol(process.env.PARAM3), studentController.getData);
 
-router.patch('/profile/changename', checkToken, checkRol(PARAM), studentController.updateName);
+router.patch('/profile/changename', checkToken, checkRol(process.env.PARAM3), studentController.updateName);
 
-router.post('/subscription', checkToken, checkRol(PARAM), studentController.subscription);
+router.post('/subscription', checkToken, checkRol(process.env.PARAM3), studentController.subscription);
 
-router.get('/profile/showsubscriptions', checkToken, checkRol(PARAM), studentController.showSubscriptions);
+router.get('/profile/showsubscriptions', checkToken, checkRol(process.env.PARAM3), studentController.showSubscriptions);
 
-router.delete('/profile/cancelsubscription', checkToken, checkRol(PARAM), studentController.cancelSubcription);
+router.delete('/profile/cancelsubscription', checkToken, checkRol(process.env.PARAM3), studentController.cancelSubcription);
 
-router.get('/availableevents', checkToken, checkRol(PARAM), studentController.availableEvents);
-
-router.post('/comment', checkToken, checkRol(PARAM), studentController.comment);
-
-router.get('/profile/showcomments', checkToken, checkRol(PARAM), studentController.showComments);
-
-router.patch('/profile/editcomment', checkToken, checkRol(PARAM), studentController.editComment);
-
-router.delete('/profile/deletecomment', checkToken, checkRol(PARAM), studentController.deleteComment);
+router.get('/availableevents', checkToken, checkRol(process.env.PARAM3), studentController.availableEvents);
 
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const Event = require('../../models/event');
 const User = require('../../models/user');
 const Subscription = require('../../models/subscription');
-const Comment = require('../../models/comment');
+const satisfactionForm = require('../../models/satisfactionForm');
 
 async function getData ({ id }) {
   const user = await User.findById(id);
@@ -54,42 +54,22 @@ async function availableEvents () {
   const events = await Event.find({ status: 'Por realizar' }).populate('director', 'name -_id');
 
   if (events.length === 0) {
-    throw new Error ('No hay eventos disponibles');
+    return ('No hay eventos por realizar');
   }
 
   return events;
 };
 
-async function comment ({ _id, message }, { id }) {
-  console.log('Ejecutando función comment sin rating');
-  if (!_id || !message) throw new Error ('No se puede crear un comentario');
-  if (!message) throw new Error ('Todos los campos son obligatorios');
 
-  const comment = new Comment ({ event: _id, user: id, message });
-  await comment.save();
+async function fillForm ({ id }, { _id, rating, feedback, answers }) {
+  if (!_id || !rating || !feedback) {
+    throw new Error ('Todos los campos del formulario son obligatorios');
+  }
 
-  return 'Comentario creado';
-};
-
-async function showComments ({ id }) {
-  const comments = await Comment.find({ user: id }, { user: false, createdAt: false, __v: false }).populate('event', 'name');
-  
-  if (comments.length === 0) throw new Error ('No has comentado en eventos');
-  
-  return comments;
-};
-
-async function editComment ({ _id, message }) {
-  if (!_id || !message) throw new Error ('No se puede editar el comentario');
-
-  await Comment.findByIdAndUpdate(_id, { message }, { new: true });
-  return 'Comentario editado';
-};
-
-async function deleteComment ({ _id }) {
-  await Comment.findByIdAndDelete(_id);
-  return 'Comentario eliminado';
-};
+  const form = new satisfactionForm ({ user: id, event: _id, rating, feedback, answers });
+  await form.save();
+  return 'Formulario creado';
+}
 
 module.exports = { 
   getData,
@@ -98,8 +78,5 @@ module.exports = {
   showSubscriptions,
   cancelSubcription,
   availableEvents,
-  comment,
-  showComments,
-  editComment,
-  deleteComment
+  fillForm
 };

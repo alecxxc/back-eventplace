@@ -11,7 +11,7 @@ const eventSchema = new Schema({
   }, 
   image: { type: String, required: true },
   place: { type: String, required: true }, 
-  date: { type: Date, required: true },
+  date: { type: Date, index: true, required: true },
   time: { type: String, required: true},
   director: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   description: { type: String, required: true},
@@ -21,6 +21,10 @@ const eventSchema = new Schema({
     default: 'Por realizar',
     required: true
   },
+  moment: [{
+    name: String,
+    time: String
+  }],
   capacity: { type: Number, required: true },
   reservedPlace: { type: Number, default: 0 }
 }, {

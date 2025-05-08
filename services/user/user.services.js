@@ -1,4 +1,5 @@
 const User = require('../../models/user');
+const Event = require('../../models/event');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../../utils/user.services/jwt');
 
@@ -50,12 +51,18 @@ async function loginUser({ email, password }) {
     message: 'Login exitoso',
     token,
     redirect: redirectRoute
-  };
+  }
+};
+
+async function recommendedEvent () {
+  const recommendedEvent = Event.find({}).limit(3).populate('director', 'name -_id');
+  return recommendedEvent; 
 }
 
 module.exports = {
   registerUser,
-  loginUser
-}
+  loginUser,
+  recommendedEvent
+};
 
 

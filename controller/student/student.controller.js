@@ -56,36 +56,9 @@ exports.availableEvents = async (req, res) => {
   }
 };
 
-exports.comment = async (req, res) => {
+exports.fillForm = async (req, res) => {
   try {
-    const result = await studentService.comment(req.body, req.user);
-    res.json({ success: true, data: result });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-exports.showComments = async (req, res) => {
-  try {
-    const result = await studentService.showComments(req.user);
-    res.json({ success: true, data: result });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-exports.editComment = async (req, res) => {
-  try {
-    const result = await studentService.editComment(req.body);
-    res.json({ success: true, data: result });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-exports.deleteComment = async (req, res) => {
-  try {
-    const result = await studentService.deleteComment(req.body);
+    const result = await studentService.fillForm(req.user, req.body);
     res.json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

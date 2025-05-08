@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
 
 const connectDB = require('./config/db');
 
@@ -9,7 +10,7 @@ const directorRoutes = require('./routes/users/director.routes');
 const adminRoutes = require('./routes/users/admin.routes');
 
 const app = express();
-const PORT = 3000;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 const corsOptions = {
   origin: '*',

@@ -9,22 +9,22 @@ const checkRol = require('../../middlewares/checkRol.middleware');
 
 
 
-router.get('/industrialDirectors', checkToken, checkRol(process.env.PARAM1), adminController.getIndustrialDirectors);
-router.get('/softwareDirectors', checkToken, checkRol(process.env.PARAM1), adminController.getSoftwareDirectors);
-router.get('/sportDirectors', checkToken, checkRol(process.env.PARAM1), adminController.getSportDirectors);
+router.get('/industrialDirectors', adminController.getIndustrialDirectors);
+router.get('/softwareDirectors', adminController.getSoftwareDirectors);
+router.get('/sportDirectors', adminController.getSportDirectors);
 
 
-router.get('/industrialStudents', checkToken, checkRol(process.env.PARAM1), adminController.getIndustrialStudents);
-router.get('/softwareStudents', checkToken, checkRol(process.env.PARAM1), adminController.getSoftwareStudents);
-router.get('/sportStudents', checkToken, checkRol(process.env.PARAM1), adminController.getSportStudents);
+router.get('/industrialStudents', adminController.getIndustrialStudents);
+router.get('/softwareStudents', adminController.getSoftwareStudents);
+router.get('/sportStudents', adminController.getSportStudents);
 
-router.patch('/changeRol', checkToken, checkRol(process.env.PARAM1), adminController.changeRol);
+router.patch('/changeRol', adminController.changeRol);
 
-router.get('/checkeventacademico', checkToken, checkRol(process.env.PARAM1), adminController.checkEventAcademico);
-router.get('/checkeventcultural', checkToken, checkRol(process.env.PARAM1), adminController.checkEventCultural);
-router.get('/checkeventdeportivo', checkToken, checkRol(process.env.PARAM1), adminController.checkEventDeportivo);
-router.get('/checkeventartistico', checkToken, checkRol(process.env.PARAM1), adminController.checkEventArtistico);
-router.get('/checkeventtecnologico', checkToken, checkRol(process.env.PARAM1), adminController.checkEventTecnologico);
+router.get('/checkeventacademico', adminController.checkEventAcademico);
+router.get('/checkeventcultural', adminController.checkEventCultural);
+router.get('/checkeventdeportivo', adminController.checkEventDeportivo);
+router.get('/checkeventartistico', adminController.checkEventArtistico);
+router.get('/checkeventtecnologico', adminController.checkEventTecnologico);
 
 
 module.exports = router;

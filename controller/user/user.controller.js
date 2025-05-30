@@ -18,9 +18,9 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.startRecommendedEvent = async (req, res) => {
+exports.featuredEvents = async (req, res) => {
   try {
-    const result = await userService.startRecommendedEvent();
+    const result = await userService.featuredEvents();
     res.json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -39,6 +39,15 @@ exports.galleryEventsForYear = async (req, res) => {
 exports.calendarEvents = async (req, res) => {
   try {
     const result = await userService.calendarEvents(req.body);
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+exports.upcomingEvents = async (req, res) => {
+  try {
+    const result = await userService.upcomingEvents();
     res.json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

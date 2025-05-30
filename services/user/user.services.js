@@ -32,29 +32,13 @@ async function loginUser({ email, password }) {
 
   const token = generateToken(user);
 
-  let redirectRoute = '';
-  switch (user.rol) {
-    case 'Estudiante':
-      redirectRoute = '/api/student/profile';
-      break;
-    case 'Director':
-      redirectRoute = '/api/director/profile';
-      break;
-    case 'Administrador':
-      redirectRoute = '/api/admin/profile';
-      break;
-    default:
-      throw new Error ('Rol no válido');
-  }
-
   return { 
     message: 'Login exitoso',
-    token,
-    redirect: redirectRoute
+    token
   }
 };
-
-async function startRecommendedEvent () {
+  
+async function featuredEvents () {
   const recommendedEvent = await Event.aggregate([
     {
       $project: {
@@ -62,7 +46,7 @@ async function startRecommendedEvent () {
         name: 1,
         date: {
           $dateToString: {
-            format: "%Y-%m-%d",  // Año-Mes-Día
+            format: "%d-%m-%Y",  // Día-Mes-Año
             date: "$date"
           }
         },
@@ -102,10 +86,9 @@ async function galleryEventsForYear () {
         _id: 0,
         name: 1,
         category: 1,
-        place: 1,
         date: {
           $dateToString: {
-            format: "%Y-%m-%d",  // Año-Mes-Día
+            format: "%d-%m-%Y",  // Día-Mes-Año
             date: "$date",
             timezone: "America/Bogota" // opcional, evita UTC
           }
@@ -126,48 +109,90 @@ async function calendarEvents({ year, month }) {
   const startDate = new Date(year, month - 1, 1);
   const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
-  // Obtenemos los eventos dentro del rango
-  const eventos = await Event.find({
-    date: {
-      $gte: startDate,
-      $lte: endDate
+   const events = await Event.aggregate([
+    {
+      $match: {
+        date: {
+          $gte: startDate,
+          $lte: endDate
+        }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        name: 1,
+        place: 1,
+        description: 1,
+        date: {
+          $dateToString: {
+            format: "%d-%m-%Y",
+            date: "$date",
+            timezone: "America/Bogota"
+          }
+        }
+      }
     }
-  }, {
-    _id: 0,
-    name: 1,
-    category: 1,
-    place: 1,
-    image: 1,
-    description: 1,
-    date: 1
-  });
+  ]);
 
-  // Formateamos la fecha con Intl.DateTimeFormat en español
-  const eventosFormateados = eventos.map(evento => {
-    const opciones = {
-      timeZone: 'America/Bogota',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    };
-
-    const fechaFormateada = new Intl.DateTimeFormat('es-CO', opciones).format(new Date(evento.date));
-
-    return {
-      ...evento.toObject(),
-      date: fechaFormateada
-    };
-  });
-
-  return eventosFormateados;
+  return events;
 };
 
+async function upcomingEvents() {
+  const now = new Date();
+
+  const events = await Event.aggregate([
+    {
+      $addFields: {
+        fullDate: {
+          $dateFromString: {
+            dateString: {
+              $concat: [
+                { $dateToString: { date: "$date", format: "%d-%m-%Y" } },
+                "T",
+                "$time",
+              ]
+            },
+            format: "%d-%m-%YT%H:%M" 
+          }
+        }
+      }
+    },
+    {
+      $match: {
+        fullDate: { $gte: now }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        image: 1,
+        name: 1,
+        date: {
+          $dateToString: {
+            format: "%Y-%m-%d",
+            date: "$fullDate",
+            timezone: "America/Bogota"
+          }
+        },
+        time: 1,
+        place: 1,
+        category: 1,
+        description: 1
+      }
+    },
+    { $sort: { fullDate: 1 } } // Orden por fecha y hora
+  ]);
+
+  return events;
+};
 
 
 module.exports = {
   registerUser,
   loginUser,
-  startRecommendedEvent,
+  featuredEvents,
   galleryEventsForYear,
-  calendarEvents
+  calendarEvents,
+  upcomingEvents
 };
